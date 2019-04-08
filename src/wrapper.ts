@@ -1,4 +1,4 @@
-export type TBorderChecker<T> = (value: T) => boolean;
+export type TChecker<T> = (value: T) => boolean;
 
 export type THandler<T> = (value: T) => T;
 
@@ -6,7 +6,7 @@ export type TIteratorBuilder<T> = (value: T) => IterableIterator<T>;
 
 type TIteratorHandler<T> = (
   value: T,
-  available: TBorderChecker<T>
+  available: TChecker<T>
 ) => IterableIterator<T>;
 
 export const wrap = <T>(
@@ -28,7 +28,7 @@ export const handle = <T>(
   iterable: TIteratorBuilder<T>,
   handler: THandler<T>
 ): TIteratorHandler<T> =>
-  function*(value: T, available: TBorderChecker<T>): IterableIterator<T> {
+  function*(value: T, available: TChecker<T>): IterableIterator<T> {
     const iterator = iterable(value);
     let item = iterator.next(handler);
     while (!item.done && available(item.value)) {
