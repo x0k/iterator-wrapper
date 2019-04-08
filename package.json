@@ -5,7 +5,7 @@
   "types": "build/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/x0k/wrapper-iterator.git"
+    "url": "https://github.com/x0k/iterator-wrapper.git"
   },
   "author": "Krasilnikov Roman <x0kill@ya.ru>",
   "license": "MIT",
@@ -33,9 +33,9 @@
     "prepublishOnly": "yarn test && yarn lint"
   },
   "bugs": {
-    "url": "https://github.com/x0k/wrapper-iterator/issues"
+    "url": "https://github.com/x0k/iterator-wrapper/issues"
   },
-  "homepage": "https://github.com/x0k/wrapper-iterator#readme",
+  "homepage": "https://github.com/x0k/iterator-wrapper#readme",
   "ava": {
     "files": [
       "tests/*.js"
