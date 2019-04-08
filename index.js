@@ -14,20 +14,15 @@ const days = buildIterable(({ year, month, day }) => day < getMonthLength(year, 
 const hours = buildIterable(({ hour }) => hour < 24)
 const minutes = buildIterable(({ minute }) => minute < 60)
 
-const from = { year: 2000, month: 11, day: 29, hour: 23, minute: 58 }
+const from = { year: 2000, month: 11, day: 30, hour: 23, minute: 58 }
 const to = { year: 2001, month: 0, day: 0, hour: 1, minute: 3 }
 
 const wrap = (iterable, handler, wrapper) => function* (value) {
   const iterator = iterable(value)
   let item = iterator.next(handler)
   while (!item.done) {
-    if (wrapper) {
-      const data = yield* wrapper(item.value)
-      item = iterator.next(() => handler(data))
-    } else {
-      yield item.value
-      item = iterator.next(handler)
-    }
+    const data = yield* wrapper(item.value)
+    item = iterator.next(() => handler(data))
   }
   return item.value
 }
@@ -64,12 +59,12 @@ handle(
     ({ hour, minute, ...rest }) => ({ hour: hour + Math.floor(minute/60), minute: minute%60, ...rest }),
     minutes
   ),
-  ({ minute, ...rest }) => ({ minute: minute + 30, ...rest }),
+  ({ minute, ...rest }) => ({ minute: minute + 20, ...rest }),
   ({ year, month, day, hour, minute }) => year < to.year || month < to.month || day < to.day || hour < to.hour || minute <= to.minute
 )
 
 const items = []
 
 for (const item of dateTime(from)) {
-  items.push(item)
+  console.log(item)
 }
