@@ -4,7 +4,7 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',  // Uses the recommended rules from the @typescript-eslint/eslint-plugin
     'prettier/@typescript-eslint',
-    'plugin:prettier/recommended'
+    'standard'
   ],
   parserOptions: {
     ecmaVersion: 2018,  // Allows for the parsing of modern ECMAScript features

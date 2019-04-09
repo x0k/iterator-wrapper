@@ -9,20 +9,20 @@ type TIteratorHandler<T> = (value: T, available: TChecker<T>) => IterableIterato
 export const wrap = <T>(
   iterable: TIteratorBuilder<T>,
   wrapper: TIteratorBuilder<T>,
-  handler: THandler<T>,
+  handler: THandler<T>
 ): TIteratorBuilder<T> =>
-  function*(value: T): IterableIterator<T> {
-    const iterator = iterable(value)
-    let item = iterator.next(handler)
-    while (!item.done) {
-      const data = yield* wrapper(item.value)
-      item = iterator.next((): T => handler(data))
+    function * (value: T): IterableIterator<T> {
+      const iterator = iterable(value)
+      let item = iterator.next(handler)
+      while (!item.done) {
+        const data = yield * wrapper(item.value)
+        item = iterator.next((): T => handler(data))
+      }
+      return item.value
     }
-    return item.value
-  }
 
 export const handle = <T>(iterable: TIteratorBuilder<T>, handler: THandler<T>): TIteratorHandler<T> =>
-  function*(value: T, available: TChecker<T>): IterableIterator<T> {
+  function * (value: T, available: TChecker<T>): IterableIterator<T> {
     const iterator = iterable(value)
     let item = iterator.next(handler)
     while (!item.done && available(item.value)) {
