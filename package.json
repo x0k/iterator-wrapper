@@ -33,7 +33,7 @@
   "scripts": {
     "build": "tsc",
     "test": "ava",
-    "lint": "tslint -p tsconfig.json",
+    "lint": "eslint src/*",
     "prepare": "yarn build",
     "prepublishOnly": "yarn test && yarn lint"
   },
