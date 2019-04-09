@@ -5,12 +5,12 @@ import { decorate, wrap } from '../build'
 const getMonthLength = (year, month) => new Date(year, month + 1, 0).getDate()
 const from = { year: 2000, month: 11, day: 30, hour: 23, minute: 48 }
 const to = { year: 2001, month: 0, day: 0, hour: 0, minute: 20 }
-const condition = value =>
-  value.year < to.year ||
-  value.month < to.month ||
-  value.day < to.day ||
-  value.hour < to.hour ||
-  value.minute <= to.minute
+const condition = ({ year, month, day, hour, minute }) =>
+  year < to.year ||
+  month < to.month ||
+  day < to.day ||
+  hour < to.hour ||
+  minute <= to.minute
 
 const buildPeriod = (key, lim, step = 1) => function * (value, date) {
   while (value < lim) {
@@ -33,11 +33,10 @@ test('Increase year', t => {
   const hours = buildPeriod('hour', 24)
   const minutes = buildPeriod('minute', 60, 10)
 
-  const m = decorate(years(from.year), months)
-  const d = decorate(m(from.month), days)
-  const h = decorate(d(from.day), hours)
-  const mn = decorate(h(from.hour), minutes)
-  const dateTime = wrap(mn(from.minute), condition)
+  const dateTime = wrap(
+    decorate(decorate(decorate(decorate(years(from.year), months, from.month), days, from.day), hours, from.hour), minutes, from.minute),
+    condition
+  )
 
   const items = [
     { year: 2000, month: 11, day: 30, hour: 23, minute: 48 },
