@@ -1,11 +1,10 @@
-type Wrapper<T> = (value: any, data: T) => IterableIterator<T>
+export type Wrapper<T> = (value: any, data: T) => IterableIterator<T>
 
-export const decorate = <T>(iterable: IterableIterator<T>, wrapper: Wrapper<T>) =>
-  function * (value: any) {
-    for (const item of iterable) {
-      value = yield * wrapper(value, item)
-    }
+export function * decorate<T> (iterable: IterableIterator<T>, wrapper: Wrapper<T>, value: any) {
+  for (const item of iterable) {
+    value = yield * wrapper(value, item)
   }
+}
 
 export function * wrap<T> (iterable: IterableIterator<T>, available: (value: T) => boolean) {
   let item = iterable.next()
