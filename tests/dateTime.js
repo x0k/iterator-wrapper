@@ -12,29 +12,29 @@ const condition = ({ year, month, day, hour, minute }) =>
   hour < to.hour ||
   minute <= to.minute
 
-const buildPeriod = (key, lim, step = 1) => function * (value, date) {
+const buildPeriod = (key, lim, step = 1) => function * ({ [key]: value }, date) {
   while (value < lim) {
     yield { [key]: value, ...date }
     value += step
   }
-  return value % lim
+  return { [key]: value % lim }
 }
 
 test('Increase year', t => {
   const years = buildPeriod('year', 4000)
   const months = buildPeriod('month', 12)
-  function * days (value, { year, month }) {
+  function * days ({ day }, { year, month }) {
     const len = getMonthLength(year, month)
-    while (value < len) {
-      yield { year, month, day: value++ }
+    while (day < len) {
+      yield { year, month, day: day++ }
     }
-    return value % len
+    return { day: day % len }
   }
   const hours = buildPeriod('hour', 24)
   const minutes = buildPeriod('minute', 60, 10)
 
   const dateTime = wrap(
-    decorate(decorate(decorate(decorate(years(from.year), months, from.month), days, from.day), hours, from.hour), minutes, from.minute),
+    decorate(decorate(decorate(decorate(years, months), days), hours), minutes),
     condition
   )
 
@@ -45,5 +45,5 @@ test('Increase year', t => {
     { year: 2001, month: 0, day: 0, hour: 0, minute: 18 }
   ]
 
-  t.deepEqual([...dateTime], items)
+  t.deepEqual([...dateTime(from)], items)
 })
