@@ -1,9 +1,11 @@
-export type Wrapper<T> = (value: any, data: T) => IterableIterator<T>
+export type wrapper<T, D> = (value: T, data: D) => IterableIterator<T>
 
-export function * decorate<T> (iterable: IterableIterator<T>, wrapper: Wrapper<T>, value: any) {
+export function * decorate<T, R> (iterable: IterableIterator<T>, wrapper: wrapper<R, T>, initialValue: R) {
+  let value = initialValue
   for (const item of iterable) {
     value = yield * wrapper(value, item)
   }
+  return value
 }
 
 export function * wrap<T> (iterable: IterableIterator<T>, available: (value: T) => boolean) {
