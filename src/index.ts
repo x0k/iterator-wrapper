@@ -1,8 +1,12 @@
-export type wrapper<T, V, R> = (value: V, data: T) => IterableIterator<R | V>
+export type Wrapper<T, V, R> = (value: V, data: T) => IterableIterator<R | V>
 
-export type IterableBuilder<V, R> = (initialValue: V) => IterableIterator<R | V>
+export type Checker<T> = (value: T) => boolean
 
-export function * wrap<T, V, R> (iterable: IterableIterator<T>, wrapper: wrapper<T, V, R>, initialValue: V) {
+export function * wrap<T, V, R> (
+  iterable: IterableIterator<T>,
+  wrapper: Wrapper<T, V, R>,
+  initialValue: V
+) {
   let value = initialValue
   for (const item of iterable) {
     value = yield * wrapper(value, item)
@@ -10,7 +14,10 @@ export function * wrap<T, V, R> (iterable: IterableIterator<T>, wrapper: wrapper
   return value
 }
 
-export function * restrict<T> (iterable: IterableIterator<T>, available: (value: T) => boolean) {
+export function * restrict<T> (
+  iterable: IterableIterator<T>,
+  available: Checker<T>
+) {
   let item = iterable.next()
   while (!item.done && available(item.value)) {
     yield item.value
