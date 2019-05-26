@@ -16,33 +16,39 @@ export function * wrapIterable<T, V, R> (
 
 export function * restrictIterable<T> (
   iterable: IterableIterator<T>,
-  available: TPredicate<T>,
-): IterableIterator<T> {
-  for (const item of iterable) {
-    if (available(item)) {
-      yield item
-    } else {
-      return item
-    }
+  predicate: TPredicate<T>,
+) {
+  let item = iterable.next()
+  while (!item.done && predicate(item.value)) {
+    yield item.value
+    item = iterable.next()
   }
+  return item.value
 }
 
 export function * mapIterable<T, R> (
   iterable: IterableIterator<T>,
   callback: (value: T) => R
 ) {
-  for (const value of iterable) {
-    yield callback(value)
+  let item = iterable.next()
+  while (!item.done) {
+    yield callback(item.value)
+    item = iterable.next()
   }
+  return callback(item.value)
 }
 
 export function * filterIterable<T> (
   iterable: IterableIterator<T>,
-  filter: TPredicate<T>,
+  predicate: TPredicate<T>,
 ) {
-  for (const item of iterable) {
-    if (filter(item)) {
-      yield item
+  let item = iterable.next()
+  while (!item.done) {
+    const { value } =item
+    if (predicate(value)) {
+      yield value
     }
+    item = iterable.next()
   }
+  return item.value
 }
