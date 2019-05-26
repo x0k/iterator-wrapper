@@ -31,7 +31,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "lint": "eslint src/*",
+    "lint": "eslint src/*.ts",
     "prepare": "rm -rf build && yarn build",
     "prepublishOnly": "yarn test && yarn lint"
   },
