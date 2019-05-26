@@ -21,8 +21,9 @@ export function * restrictIterable<T> (
   for (const item of iterable) {
     if (available(item)) {
       yield item
+    } else {
+      return item
     }
-    return item
   }
 }
 
