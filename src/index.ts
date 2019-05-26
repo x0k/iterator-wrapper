@@ -1,10 +1,10 @@
-export type Wrapper<T, V, R> = (value: V, data: T) => IterableIterator<R | V>
+export type TWrapper<T, V, R> = (value: V, data: T) => IterableIterator<R | V>
 
-export type Checker<T> = (value: T) => boolean
+export type TPredicate<T> = (value: T) => boolean
 
 export function * wrapIterable<T, V, R> (
   iterable: IterableIterator<T>,
-  wrapper: Wrapper<T, V, R>,
+  wrapper: TWrapper<T, V, R>,
   initialValue: V
 ) {
   let value = initialValue
@@ -16,7 +16,7 @@ export function * wrapIterable<T, V, R> (
 
 export function * restrictIterable<T> (
   iterable: IterableIterator<T>,
-  available: Checker<T>,
+  available: TPredicate<T>,
 ) {
   let item = iterable.next()
   while (!item.done && available(item.value)) {
@@ -30,4 +30,19 @@ export function * castIterableType<T, R> (iterable: IterableIterator<T>, typeCas
   for (const value of iterable) {
     yield typeCast(value)
   }
+}
+
+export function * filterIterable<T> (
+  iterable: IterableIterator<T>,
+  filter: TPredicate<T>,
+) {
+  let item = iterable.next()
+  while (!item.done) {
+    const { value } = item
+    if (filter(value)) {
+      yield value
+    }
+    item = iterable.next()
+  }
+  return item.value
 }

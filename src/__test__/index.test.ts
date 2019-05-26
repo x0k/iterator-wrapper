@@ -1,4 +1,4 @@
-import { wrapIterable, restrictIterable, castIterableType } from '../index'
+import { wrapIterable, restrictIterable, castIterableType, filterIterable } from '../index'
 
 type TPredicate<T> = (value: T) => boolean
 
@@ -190,4 +190,21 @@ test('Increase year', () => {
   ]
 
   expect([...dateTime]).toEqual(items)
+})
+
+function * forFilter () {
+  yield 1
+  yield 2
+  yield 3
+  yield 4
+  yield 5
+}
+
+function filter (value: number) {
+  return value % 2 === 0
+}
+
+test('Filter iterable', () => {
+  const gen = filterIterable(forFilter(), filter)
+  expect([...gen]).toEqual([ 2, 4 ])
 })
