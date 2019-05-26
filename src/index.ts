@@ -26,9 +26,12 @@ export function * restrictIterable<T> (
   return item.value
 }
 
-export function * castIterableType<T, R> (iterable: IterableIterator<T>, typeCast: (value: T) => R) {
+export function * mapIterable<T, R> (
+  iterable: IterableIterator<T>,
+  callback: (value: T) => R
+) {
   for (const value of iterable) {
-    yield typeCast(value)
+    yield callback(value)
   }
 }
 

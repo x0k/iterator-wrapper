@@ -1,4 +1,4 @@
-import { wrapIterable, restrictIterable, castIterableType, filterIterable } from '../index'
+import { wrapIterable, restrictIterable, mapIterable, filterIterable } from '../index'
 
 type TPredicate<T> = (value: T) => boolean
 
@@ -154,7 +154,7 @@ test('Increase year', () => {
   const minutes = withConstraints(minutesIterator, { step: 10 })
 
   const dateTime = restrictIterable<IMinutes>(
-    castIterableType(
+    mapIterable(
       wrapIterable<IHours | number, number, IMinutes>(
         wrapIterable<IDate | number, number, IHours>(
           wrapIterable<IMonths | number, number, IDate>(
