@@ -18,12 +18,12 @@ export function * restrictIterable<T> (
   iterable: IterableIterator<T>,
   available: TPredicate<T>,
 ) {
-  let item = iterable.next()
-  while (!item.done && available(item.value)) {
-    yield item.value
-    item = iterable.next()
+  for (const item of iterable) {
+    if (available(item)) {
+      yield item
+    }
+    return item
   }
-  return item.value
 }
 
 export function * mapIterable<T, R> (
@@ -39,13 +39,9 @@ export function * filterIterable<T> (
   iterable: IterableIterator<T>,
   filter: TPredicate<T>,
 ) {
-  let item = iterable.next()
-  while (!item.done) {
-    const { value } = item
-    if (filter(value)) {
-      yield value
+  for (const item of iterable) {
+    if (filter(item)) {
+      yield item
     }
-    item = iterable.next()
   }
-  return item.value
 }
