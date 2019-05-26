@@ -17,7 +17,7 @@ export function * wrapIterable<T, V, R> (
 export function * restrictIterable<T> (
   iterable: IterableIterator<T>,
   available: TPredicate<T>,
-) {
+): IterableIterator<T> {
   for (const item of iterable) {
     if (available(item)) {
       yield item
