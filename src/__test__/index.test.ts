@@ -1,4 +1,4 @@
-import { wrapIterable, restrictIterable, mapIterable, filterIterable } from '../index'
+import { wrapIterable, restrictIterable, mapIterable, filterIterable, reduceIterable } from '../index'
 
 type TPredicate<T> = (value: T) => boolean
 
@@ -207,4 +207,29 @@ function filter (value: number) {
 test('Filter iterable', () => {
   const gen = filterIterable(forFilter(), filter)
   expect([...gen]).toEqual([ 2, 4 ])
+})
+
+test('Reduce iterable', () => {
+
+  function * generator () {
+    for (let i = 0; i < 12; i++) {
+      yield i
+    }
+  }
+  
+  function separator (acc: number[]) {
+    return acc.length < 4
+  }
+  
+  function reducer (acc: number[], val: number) {
+    return acc.concat(val)
+  }
+
+  const gen = generator()
+  const reduced = reduceIterable(gen, separator, reducer, [])
+  expect([...reduced]).toEqual([
+    [0, 1, 2, 3],
+    [4, 5, 6, 7],
+    [8, 9, 10, 11]
+  ])
 })

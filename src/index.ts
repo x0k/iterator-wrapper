@@ -52,3 +52,26 @@ export function * filterIterable<T> (
   }
   return item.value
 }
+
+export function * reduceIterable<T, R> (
+  iterable: IterableIterator<T>,
+  separator: (previous: R, current: T, index: number) => any,
+  reducer: (previous: R, current: T, index: number) => R,
+  initialValue: R
+) {
+  let item = iterable.next()
+  let accumulator = initialValue
+  let index = 0
+  while (!item.done) {
+    const { value } = item
+    if (separator(accumulator, value, index)) {
+      accumulator = reducer(accumulator, value, index)
+    } else {
+      yield accumulator
+      accumulator = reducer(initialValue, value, index)
+    }
+    index++
+    item = iterable.next()
+  }
+  yield accumulator
+}
