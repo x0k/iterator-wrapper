@@ -75,21 +75,21 @@ function monthsIterator(incrementor: TIncrementor) {
 }
 
 function dateIterator(incrementor: TIncrementor) {
-  return function * ({ date, day, ...rest }: IDate) {
+  return function * ({ date, ...rest }: IDate) {
     const { year, month, monthMilliseconds } = rest
     const len = getMonthLength(year, month)
     let dateValue = date
-    let dayValue = day
+    let dayValue = new Date(rest.year, rest.month, date).getDay()
     let ms = monthMilliseconds + (date -1) * dayMilliseconds
     while (dateValue <= len) {
       yield { ...rest, day: dayValue, date: dateValue, dateMilliseconds: ms }
-      const next = incrementor(date)
+      const next = incrementor(dateValue)
       const diff = next - dateValue
       dayValue = (dayValue + diff) % 7
       ms += diff * dayMilliseconds
       dateValue = next
     }
-    return { ...rest, day: (date - len + 1) % 7, date: date % len + 1, dateMilliseconds: ms }
+    return { ...rest, day: dayValue, date: date % len + 1, dateMilliseconds: ms }
   }
 }
 
