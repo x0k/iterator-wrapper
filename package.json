@@ -17,15 +17,12 @@
     "ava": "^1.4.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.1.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
-    "prettier": "^1.16.4",
-    "typescript": "^3.4.2"
+    "typescript": "3.5"
   },
   "files": [
     "build/**/*"
@@ -40,10 +37,5 @@
   "bugs": {
     "url": "https://github.com/x0k/iterator-wrapper/issues"
   },
-  "homepage": "https://github.com/x0k/iterator-wrapper#readme",
-  "ava": {
-    "files": [
-      "tests/*.js"
-    ]
-  }
+  "homepage": "https://github.com/x0k/iterator-wrapper#readme"
 }
