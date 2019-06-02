@@ -1,17 +1,17 @@
-export type TWrapper<T, V, R> = (value: V, data: T) => IterableIterator<R | V>
+export type TWrapper<T, R> = (value: T) => IterableIterator<R>
 
 export type TPredicate<T> = (value: T) => boolean
 
 export function * wrapIterable<T, V, R> (
   iterable: IterableIterator<T>,
-  wrapper: TWrapper<T, V, R>,
-  initialValue: V
+  wrapper: TWrapper<V, R>,
+  initialState: V,
+  merge?: (state: V, item: T) => V
 ) {
-  let value = initialValue
+  let state = initialState
   for (const item of iterable) {
-    value = yield * wrapper(value, item)
+    state = yield * wrapper(merge ? merge(state, item) : Object.assign(state, item))
   }
-  return value
 }
 
 export function * restrictIterable<T> (
@@ -55,7 +55,7 @@ export function * filterIterable<T> (
 
 export function * reduceIterable<T, R> (
   iterable: IterableIterator<T>,
-  separator: (previous: R, current: T, index: number) => any,
+  separator: (previous: R, current: T, index: number) => boolean,
   reducer: (previous: R, current: T, index: number) => R,
   initialValue: R
 ) {
